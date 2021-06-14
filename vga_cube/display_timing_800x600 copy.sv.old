@@ -1,0 +1,75 @@
+module display_timing_800x600 #(
+    parameter H_BITW=16,                    // bit width of horizontal screen pos
+    parameter V_BITW=16,                    // bit width of vertical screen pos
+    parameter H_RES=800,                    // horizontal resolution (px)
+    parameter H_FP=56,                      // horizontal front porch
+    parameter H_SP=120,                     // horizontal sync pulse 
+    parameter H_BP=64,                      // horizontal bakc porch
+    parameter H_POL=1,                      // horizontal sync polarity (0:neg, 1:pos)
+    parameter V_RES=600,                    // vetical resolution (px)
+    parameter V_FP=37,                      // vertical front porch
+    parameter V_SP=6,                       // vertical sync pulse
+    parameter V_BP=23,                      // vertical back porch
+    parameter V_POL=1                       // vertical sync polarity (0:neg, 1:pos)
+) (
+    input   wire logic clk_pix,                 // pixel clock
+    input   wire logic rst,                     // reset
+    output       logic hsync,                   // horizontal sync
+    output       logic vsync,                   // vertical sync
+    output       logic de,                      // data enable (low in blanking intervals)
+    output       logic frame,                   // high at start of new frame
+    output       logic [H_BITW:0] sx,   // horizontal screen position
+    output       logic [V_BITW:0] sy    // vertical screen position
+);
+    // https://github.com/projf/projf-explore/blob/master/lib/display/display_timings_720p.sv
+
+    // horizontal timings
+    localparam H_STA    = 0;
+    localparam HA_END   = H_RES - 1; // active end
+    localparam HS_STA   = HA_END + H_FP; // sync pulse start (end of front porch)
+    localparam HS_END   = HS_STA + H_SP;    // sync pulse end
+    localparam H_END    = HS_END + H_BP;    // last pixel of back porch
+
+    localparam V_STA    = 0;
+    localparam VA_END   = V_RES - 1; // active end
+    localparam VS_STA   = VA_END + V_FP; // sync pulse start (end of front porch)
+    localparam VS_END   = VS_STA + V_SP;    // sync pulse end
+    localparam V_END    = VS_END + V_BP;    // last pixel of back porch
+
+    logic [H_BITW:0] x;
+    logic [V_BITW:0] y;
+    assign sx = x;
+    assign sy = y;
+
+    always_comb begin
+        hsync = ~(x >= HS_STA && x < HS_END); // negative polarity output
+        vsync = ~(y >= VS_STA && y < VS_END);
+        de = (x <= HA_END && y <= VA_END);
+        frame = (x == H_STA && y == V_STA);
+    end
+
+    always_ff @(posedge clk_pix or posedge rst) begin
+        if (rst) begin
+            x <= -1;
+            y <= 0;
+        end
+        if (x == H_END) begin
+            x <= -1;
+            y <= (y == V_END) ? 0 : y + 1;
+        end else begin
+            x <= x + 1;
+        end
+    end
+
+    always_ff @(negedge clk_pix) begin
+        if (frame) begin
+            $display("display_timing: START OF FRAME");
+            $display("H_BITW %0d H_STA %0d HA_END %0d HS_STA %0d HS_END %0d H_END %0d",
+                H_BITW, H_STA, HA_END, HS_STA, HS_END, H_END);
+            $display("V_BITW %0d V_STA %0d VA_END %0d VS_STA %0d VS_END %0d V_END %0d",
+                V_BITW, V_STA, VA_END, VS_STA, VS_END, V_END);
+        end
+        $display("%0d,%0d,%0d,%0d,%0d,%0d", frame, de, hsync, vsync, x, y);
+    end
+
+endmodule

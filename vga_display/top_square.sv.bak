@@ -1,0 +1,44 @@
+module top_square #(
+    localparam CORDW = 10
+)(
+    input clk_50m, //100MHz clock
+    input btn_rst,
+    output vga_hsync,
+    output vga_vsync,
+    output [3:0] vga_r,
+    output [3:0] vga_g,
+    output [3:0] vga_b
+);
+
+    // generate pixel clock
+    logic clk_pix;
+    logic clk_locked;
+
+    logic [CORDW-1:0] sx, sy;
+    logic hsync;
+    logic vsync;
+    logic de;
+
+    display_timings_640x480 _display_timings_640x480 (
+        .clk_pix,
+        .rst(!clk_locked),
+        .sx,
+        .sy,
+        .hsync,
+        .vsync,
+        .de
+    );
+
+    // 32x32 pixel square
+    logic q_draw;
+    always_comb q_draw = (sx < 32 && sy < 32) ? 1 : 0;
+
+    // vga output
+    always_ff @(posedge clk_pix) begin
+        vga_hsync <= hsync;
+        vga_vsync <= vsync;
+        vga_r <= !de ? 4'h0 : (q_draw ? 4'hF : 4'h0);
+        vga_g <= !de ? 4'h0 : (q_draw ? 4'h8 : 4'h8);
+        vga_b <= !de ? 4'h0 : (q_draw ? 4'h0 : 4'hF);
+    end
+endmodule

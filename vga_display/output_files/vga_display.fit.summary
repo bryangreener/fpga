@@ -1,0 +1,16 @@
+Fitter Status : Successful - Fri May 28 16:01:33 2021
+Quartus Prime Version : 20.1.0 Build 711 06/05/2020 SJ Lite Edition
+Revision Name : vga_display
+Top-level Entity Name : top
+Family : Cyclone IV E
+Device : EP4CE22F17C6
+Timing Models : Final
+Total logic elements : 715 / 22,320 ( 3 % )
+    Total combinational functions : 527 / 22,320 ( 2 % )
+    Dedicated logic registers : 532 / 22,320 ( 2 % )
+Total registers : 532
+Total pins : 7 / 154 ( 5 % )
+Total virtual pins : 0
+Total memory bits : 7,168 / 608,256 ( 1 % )
+Embedded Multiplier 9-bit elements : 0 / 132 ( 0 % )
+Total PLLs : 1 / 4 ( 25 % )

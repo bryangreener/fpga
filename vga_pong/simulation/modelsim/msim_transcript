@@ -1,0 +1,70 @@
+# Reading pref.tcl
+# do vga_pong_run_msim_rtl_verilog.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 2020.1 Lib Mapping Utility 2020.02 Feb 28 2020
+# vmap work rtl_work 
+# Copying C:/intelFPGA_lite/20.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vlog -sv -work work +incdir+H:/code/fpga/vga_pong {H:/code/fpga/vga_pong/vga_pong.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 16:08:42 on May 27,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_pong" H:/code/fpga/vga_pong/vga_pong.sv 
+# -- Compiling module vga_pong
+# 
+# Top level modules:
+# 	vga_pong
+# End time: 16:08:42 on May 27,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_pong {H:/code/fpga/vga_pong/hsync_generator.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 16:08:42 on May 27,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_pong" H:/code/fpga/vga_pong/hsync_generator.sv 
+# -- Compiling module hsync_generator
+# 
+# Top level modules:
+# 	hsync_generator
+# End time: 16:08:43 on May 27,2021, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# 
+# vlog -sv -work work +incdir+H:/code/fpga/vga_pong {H:/code/fpga/vga_pong/vga_pong_tb.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 16:08:43 on May 27,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_pong" H:/code/fpga/vga_pong/vga_pong_tb.sv 
+# -- Compiling module vga_pong_tb
+# ** Error: H:/code/fpga/vga_pong/vga_pong_tb.sv(28): (vlog-2730) Undefined variable: 'CycleCount'.
+# -- Compiling module tbCounter
+# -- Compiling module tbCounterWLoad
+# End time: 16:08:43 on May 27,2021, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# ** Error: C:/intelFPGA_lite/20.1/modelsim_ase/win32aloem/vlog failed.
+# Error in macro ./vga_pong_run_msim_rtl_verilog.do line 11
+# C:/intelFPGA_lite/20.1/modelsim_ase/win32aloem/vlog failed.
+#     while executing
+# "vlog -sv -work work +incdir+H:/code/fpga/vga_pong {H:/code/fpga/vga_pong/vga_pong_tb.sv}"
+vsim work.vga_pong
+# vsim work.vga_pong 
+# Start time: 16:08:52 on May 27,2021
+# Loading sv_std.std
+# Loading work.vga_pong
+# Loading work.hsync_generator
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'syncgen'.  Expected 8, found 6.
+#    Time: 0 ps  Iteration: 0  Instance: /vga_pong/syncgen File: H:/code/fpga/vga_pong/vga_pong.sv Line: 17
+# ** Warning: (vsim-3722) H:/code/fpga/vga_pong/vga_pong.sv(17): [TFMPC] - Missing connection for port 'clk_en'.
+# ** Warning: (vsim-3722) H:/code/fpga/vga_pong/vga_pong.sv(17): [TFMPC] - Missing connection for port 'rst'.
+add wave -position end  sim:/vga_pong/clk
+add wave -position end  sim:/vga_pong/vga_h_sync
+add wave -position end  sim:/vga_pong/vga_v_sync
+add wave -position end  sim:/vga_pong/in_display_area
+add wave -position end  sim:/vga_pong/vga_r
+add wave -position end  sim:/vga_pong/vga_g
+add wave -position end  sim:/vga_pong/vga_b
+add wave -position end  sim:/vga_pong/cnt_x
+add wave -position end  sim:/vga_pong/cnt_y
+run
+# End time: 16:10:44 on May 27,2021, Elapsed time: 0:01:52
+# Errors: 0, Warnings: 3

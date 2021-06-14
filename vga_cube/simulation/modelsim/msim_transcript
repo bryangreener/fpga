@@ -1,0 +1,103 @@
+# Reading pref.tcl
+# do top_cube_run_msim_rtl_verilog.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 2020.1 Lib Mapping Utility 2020.02 Feb 28 2020
+# vmap work rtl_work 
+# Copying C:/intelFPGA_lite/20.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vlog -vlog01compat -work work +incdir+H:/code/fpga/vga_cube/ip {H:/code/fpga/vga_cube/ip/pll.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:12 on Jun 04,2021
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+H:/code/fpga/vga_cube/ip" H:/code/fpga/vga_cube/ip/pll.v 
+# -- Compiling module pll
+# 
+# Top level modules:
+# 	pll
+# End time: 10:39:12 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+H:/code/fpga/vga_cube/db {H:/code/fpga/vga_cube/db/pll_altpll.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:12 on Jun 04,2021
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+H:/code/fpga/vga_cube/db" H:/code/fpga/vga_cube/db/pll_altpll.v 
+# -- Compiling module pll_altpll
+# 
+# Top level modules:
+# 	pll_altpll
+# End time: 10:39:12 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_cube {H:/code/fpga/vga_cube/xd.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:12 on Jun 04,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_cube" H:/code/fpga/vga_cube/xd.sv 
+# -- Compiling module xd
+# 
+# Top level modules:
+# 	xd
+# End time: 10:39:13 on Jun 04,2021, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_cube {H:/code/fpga/vga_cube/linebuffer.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:13 on Jun 04,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_cube" H:/code/fpga/vga_cube/linebuffer.sv 
+# -- Compiling module linebuffer
+# 
+# Top level modules:
+# 	linebuffer
+# End time: 10:39:13 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_cube {H:/code/fpga/vga_cube/draw_line.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:13 on Jun 04,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_cube" H:/code/fpga/vga_cube/draw_line.sv 
+# -- Compiling module draw_line
+# 
+# Top level modules:
+# 	draw_line
+# End time: 10:39:13 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_cube {H:/code/fpga/vga_cube/display_timing_800x600.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:13 on Jun 04,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_cube" H:/code/fpga/vga_cube/display_timing_800x600.sv 
+# -- Compiling module display_timing_800x600
+# 
+# Top level modules:
+# 	display_timing_800x600
+# End time: 10:39:13 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_cube {H:/code/fpga/vga_cube/bram_sdp.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:13 on Jun 04,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_cube" H:/code/fpga/vga_cube/bram_sdp.sv 
+# -- Compiling module bram_sdp
+# 
+# Top level modules:
+# 	bram_sdp
+# End time: 10:39:13 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_cube {H:/code/fpga/vga_cube/framebuffer.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:13 on Jun 04,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_cube" H:/code/fpga/vga_cube/framebuffer.sv 
+# -- Compiling module framebuffer
+# 
+# Top level modules:
+# 	framebuffer
+# End time: 10:39:13 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+H:/code/fpga/vga_cube {H:/code/fpga/vga_cube/top_cube.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 10:39:13 on Jun 04,2021
+# vlog -reportprogress 300 -sv -work work "+incdir+H:/code/fpga/vga_cube" H:/code/fpga/vga_cube/top_cube.sv 
+# -- Compiling module top_cube
+# 
+# Top level modules:
+# 	top_cube
+# End time: 10:39:13 on Jun 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 

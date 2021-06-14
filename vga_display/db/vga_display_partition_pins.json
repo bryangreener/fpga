@@ -1,0 +1,49 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "vga_hsync",
+					"strict" : false
+				},
+				{
+					"name" : "vga_vsync",
+					"strict" : false
+				},
+				{
+					"name" : "vga_r",
+					"strict" : false
+				},
+				{
+					"name" : "vga_g",
+					"strict" : false
+				},
+				{
+					"name" : "vga_b",
+					"strict" : false
+				},
+				{
+					"name" : "btn_rst",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tms",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tck",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdi",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdo",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,80 @@
+module display_timing (
+    input clk,
+    input rst,
+    output _r,
+    output _g,
+    output _b,
+    output _hs,
+    output _vs
+);
+
+    reg [10:0] hreg;
+    reg hs;
+    wire hm = (hreg == 800);
+
+    reg [9:0] vreg;
+    reg vs;
+    wire vm = (vreg == 600);
+
+    reg r, g, b;
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            hreg <= 0;
+            vreg <= 0;
+        end else if (hm) begin
+            hreg <= 0;
+            if (vm) begin
+                vreg <= 0;
+            end else begin
+                vreg <= vreg + 1;
+            end
+        end else begin
+            hreg <= hreg + 1;
+        end
+    end
+
+    parameter h_max_val     = 1039,
+    parameter h_dim         = 800,
+    parameter h_front_porch = 56,
+    parameter h_sync_pulse  = 120,
+    parameter v_max_val     = 665,
+    parameter v_dim         = 600,
+    parameter v_front_porch = 37,
+    parameter v_sync_pulse  = 6
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            hs <= 0;
+            vs <= 0;
+        end else begin
+            if (hreg == (800 + 56)) begin
+                hs <= 1;
+            end else if (hreg == (600 + 56 + 120)) begin
+                hs <= 0;
+            end
+
+            if (vreg == (600 + 37)) begin
+                vs <= 1;
+            end else if (vreg == (600 + 37 + 6)) begin
+                vs <= 0;
+            end
+
+            if (hreg >= 100 && hreg <= 200 && vreg >= 100 && vreg <= 200) begin
+                r <= 0;
+                g <= 1;
+                b <= 0;
+            end else begin
+                r <= 1;
+                g <= 1;
+                b <= 1;
+            end
+        end
+    end
+
+    assign _hs = ~hs;
+    assign _vs = ~vs;
+    assign _r = r && vreg < 600 && hreg < 800;
+    assign _g = g && vreg < 600 && hreg < 800;
+    assign _b = b && vreg < 600 && hreg < 800;
+
+endmodule

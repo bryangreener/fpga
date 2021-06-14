@@ -1,0 +1,20 @@
+module test_clk #(
+    parameter d_max = 200
+)(
+    input clk,
+    output [3:0] d
+);
+    reg [3:0] d_reg;
+    wire max_d = (d_reg == d_max);
+
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            d_reg <= 0;
+        end else begin
+            d_reg <= d_reg + 1;
+        end
+    end
+
+    assign d = d_reg;
+
+endmodule

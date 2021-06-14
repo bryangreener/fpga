@@ -1,0 +1,1 @@
+Warning (10268): Verilog HDL information at clock_divider.sv(11): always construct contains both blocking and non-blocking assignments File: E:/de0-nano/Tools/DE0_Nano_SystemBuilder/CodeGenerated/DE0_NANO/DE0_NANO_TEST/clock_divider.sv Line: 11

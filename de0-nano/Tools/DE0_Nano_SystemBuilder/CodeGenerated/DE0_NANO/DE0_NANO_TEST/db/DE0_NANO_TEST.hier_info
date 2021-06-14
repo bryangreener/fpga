@@ -1,0 +1,37 @@
+|clock_divider
+clk => divided_clk~reg0.CLK
+clk => counter_value[0].CLK
+clk => counter_value[1].CLK
+clk => counter_value[2].CLK
+clk => counter_value[3].CLK
+clk => counter_value[4].CLK
+clk => counter_value[5].CLK
+clk => counter_value[6].CLK
+clk => counter_value[7].CLK
+clk => counter_value[8].CLK
+clk => counter_value[9].CLK
+clk => counter_value[10].CLK
+clk => counter_value[11].CLK
+clk => counter_value[12].CLK
+clk => counter_value[13].CLK
+clk => counter_value[14].CLK
+clk => counter_value[15].CLK
+clk => counter_value[16].CLK
+clk => counter_value[17].CLK
+clk => counter_value[18].CLK
+clk => counter_value[19].CLK
+clk => counter_value[20].CLK
+clk => counter_value[21].CLK
+clk => counter_value[22].CLK
+clk => counter_value[23].CLK
+clk => counter_value[24].CLK
+clk => counter_value[25].CLK
+clk => counter_value[26].CLK
+clk => counter_value[27].CLK
+clk => counter_value[28].CLK
+clk => counter_value[29].CLK
+clk => counter_value[30].CLK
+clk => counter_value[31].CLK
+divided_clk << divided_clk~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+

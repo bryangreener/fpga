@@ -1,0 +1,39 @@
+module vga_pong #(
+    parameter width_x = 10,
+    parameter width_y = 9
+)(
+    input clk,
+    output vga_h_sync,
+    output vga_v_sync,
+    output vga_r,
+    output vga_g,
+    output vga_b
+);
+
+    wire in_display_area;
+    wire [width_x-1:0] cnt_x;
+    wire [width_y-1:0] cnt_y;
+
+    hsync_generator syncgen(
+        .clk(clk), 
+        .vga_h_sync(vga_h_sync), 
+        .vga_v_sync(vga_v_sync),
+        .in_display_area(in_display_area),
+        .cnt_x(cnt_x)
+        .cnt_y(cnt_y)
+    );
+
+    // Draw border around screen
+    wire border = (cnt_x[width_x-1:3]==0) || (cnt_x[width_x-1:3]==79) || (cnt_y[width_y-1:3]==0) || (cnt_y[width_y-1:3]==59);
+    wire r = border;
+    wire g = border;
+    wire b = border;
+
+    reg vga_r, vga_g, vga_b;
+    always_ff @(posedge clk) begin : proc_draw_border
+        vga_r <= r & in_display_area;
+        vga_g <= g & in_display_area;
+        vga_b <= b & in_display_area;
+    end proc_draw_border
+
+endmodule

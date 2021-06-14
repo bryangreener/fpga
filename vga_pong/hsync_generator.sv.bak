@@ -1,0 +1,55 @@
+module hsync_generator #(
+    parameter width_x = 10,
+    parameter width_y = 9,
+    parameter max_x = 767,
+    parameter max_y = 400,
+    parameter y_h = 45, // adjust to move display horizontally
+    parameter y_v = 500 // adjust to move display vertically
+
+)(
+    input clk,
+    input clk_en,
+    input_rst,
+    output vga_h_sync,
+    output vga_v_sync,
+    output in_display_area,
+    output cnt_x,
+    output cnt_y
+);
+    reg [width_x-1:0] cnt_x;
+    reg [width_y-1:0] cnt_y;
+
+    wire cnt_x_maxed = (cnt_x == max_x)
+    wire [width_x-1:0] inc_x = cnt_x_maxed ? : '0 : (cnt_x + 1);
+    wire [width_y-1:0] inc_y = cnt_x_maxed ? : '0 : (cnt_y + 1);
+
+    always_ff @(posedge clk || posedge rst) begin : proc_cnt
+        if (rst) begin
+            cnt_x <= '0;
+        end
+        else if (clk_en) begin
+            cnt_x <= inc_x;
+            cnt_y <= inc_y
+        end
+    end proc_cnt
+
+    reg vga_hs, vga_vs;
+    always_ff @(posedge clk) begin : proc_vsync
+        vga_hs <= (cnt_x[width_x-1:4]==y_h);
+        vga_vs <= (cnt_y == y_v);
+    end proc_vsync
+
+    reg in_display_area;
+    always_ff @(posedge clk) begin : proc_in_display_area
+        if (in_display_area == 0) begin
+            in_display_area <= (cnt_x_maxed) && (cnt_y < max_y);
+        end
+        else begin
+            in_display_area <= !(cnt_x == 639);
+        end
+    end proc_in_display_area
+
+    assign vga_h_sync = ~vga_hs;
+    assign vga_v_sync = ~vga_vs;
+
+endmodule

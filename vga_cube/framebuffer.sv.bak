@@ -1,0 +1,58 @@
+module framebuffer #(
+    parameter WIDTH     = 100,
+    parameter HEIGHT    = 100,
+    parameter COLORW    = 3,
+    parameter DT_CORDW  = 16,  // CORDW for display timing screen pos
+    parameter POSX      = 250,   // screen alignment x min position
+    parameter POSY      = 250    // screen alignment y min position
+) (
+    input clk,
+    input rst,
+    input we,
+    input oe,
+    input [FB_ADDRW-1:0] x,
+    input [FB_ADDRW-1:0] y,
+    input [COLORW-1:0] color,
+    input [DT_CORDW-1:0] sx,          // display timing current x pos
+    input [DT_CORDW-1:0] sy,          // display timing current y pos
+    output r,
+    output g,
+    output b
+);
+    localparam FB_PIXEL = WIDTH * HEIGHT;
+    localparam FB_ADDRW = $clog2(FB_PIXEL * COLORW);
+    localparam FB_DEPTH = (FB_PIXEL - 1) * COLORW;
+    // Initialize memory array with 0s
+    logic [FB_ADDRW-1:0] mem [FB_DEPTH:0];
+    initial begin
+        for (int i = 0; i < FB_DEPTH; i=i+1)
+            mem[i] = '0;
+    end
+
+    logic [FB_ADDRW-1:0] fb_addr;
+
+    logic in_x, in_y;
+    
+    assign in_x = (sx >= POSX && sx < POSX + WIDTH);
+    assign in_y = (sy >= POSY && sy < POSY + WIDTH);
+
+    assign fb_addr = ((WIDTH * y) * COLORW) + (x * COLORW);
+    always_ff @(posedge clk) begin
+        if (we) begin
+            mem[fb_addr] <= color;
+        end
+    end
+    
+    assign {r, g, b} = (oe && in_x && in_y) ? mem[fb_addr] : 0;
+    /*
+    always_comb begin
+        if (sx >= POSX && sy >= POSY && sx < POSX + WIDTH && sy < POSY + HEIGHT) begin
+            {r, g, b} = mem[fb_addr];
+        end else begin
+            {r, g, b} = 0; // set r, g, and b to 0;
+        end
+    end
+    */
+    //assign {r, g, b} = mem[fb_addr];
+
+endmodule

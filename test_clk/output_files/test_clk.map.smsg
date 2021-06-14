@@ -1,0 +1,1 @@
+Warning (10268): Verilog HDL information at bresenham.sv(19): always construct contains both blocking and non-blocking assignments File: H:/code/fpga/test_clk/bresenham.sv Line: 19

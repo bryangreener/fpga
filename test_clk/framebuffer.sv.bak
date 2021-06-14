@@ -1,0 +1,90 @@
+module framebuffer #(
+    // Horizontal Timings
+    parameter h_dim = 800,  // Active Video (800 = 16us)
+    parameter h_fp = 56,    // Front Porch (56 = 1.12us)
+    parameter h_sp = 120,   // Sync Pulse (120 = 2.4us)
+    parameter h_bp = 64,    // Back Porch (64 = 1.28us)
+    parameter h_tot = h_dim + h_fp + h_sp + h_bp - 1,
+    // Vertical Timings
+    parameter v_dim = 600,  // Active Video (600 = 12480us)
+    parameter v_fp = 37,    // Front Porch (37 = 769.6us)
+    parameter v_sp = 6,     // Sync Pulse (6 = 126.8us)
+    parameter v_bp = 23,    // Back Porch (23 = 478.4us)
+    parameter v_tot = v_dim + v_fp + v_sp + v_bp - 1
+)(
+    input clk,
+    input rst,
+    input [10:0] x,
+    input [9:0] y,
+    input pixel_color,
+    input pixel_write,
+    output vga_r,
+    output vga_g,
+    output vga_b,
+    output vga_clk,
+    output vga_hs,
+    output vga_vs,
+    output vga_blank_n,
+    output vga_sync_n
+);
+
+    logic [10:0] hcount;
+    logic eol;
+    logic [9:0] vcount;
+    logic eof;
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            hcount <= 0;
+        end else if (eol) begin
+            hcount <= 0;
+        end else begin
+            hcount <= hcount + 1;
+        end
+    end
+
+    assign eol = hcount == h_tot;
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            vcount <= 0;
+        end else if (eol) begin
+            if (eof) begin
+                vcount <= 0;
+            end else begin
+                vcount <= v_count + 1;
+            end
+        end
+    end
+
+    assign eof = vcount == v_tot;
+
+    assign vga_hs = !((hcount[10:7] == 4'b1010) & (hcount[6] | hcount[5]));
+    assign vga_vs !(vcount[9:1] == (v_dim + v_fp) / 2);
+
+    // blanking, memory, and rgb
+    assign vga_sync_n = 1; // sync on r, g, and b. unused for vga
+    
+    logic blank;
+    assign blank = (hcount[10] & (hcount[9] | hcount[8])) | (vcount[9] | (vcount[8:5] == 4'b1111));
+
+    logic framebuffer [(h_dim*v_dim)-1:0]; // w * h
+    logic [18:0] read_addr, write_addr;
+
+    assign write_addr = x + (y << 9) + (y << 7); // x + y * h_dim
+    assign read_addr == (hcount >> 1) + (vcount << 9) + (vcount << 7);
+
+    logic pixel_read;
+    always_ff @(posedge clk) begin
+        if (pixel_write) begin
+            framebuffer[write_addr] <= pixel_color;
+        end
+        if (hcount[0]) begin
+            pixel_read <= framebuffer[read_addr];
+            vga_blank_n <= ~blank; //sync blank with read pixel data
+        end
+    end
+
+    assign vga_clk = hcount[0]; // clk in mhz
+    assign {vga_r, vga_g, vga_b} = pixel_read ? 24'hFF_FF_FF : 24'h0;
+endmodule
