@@ -2,7 +2,7 @@
 module draw_line_tb ();
     localparam WIDTH = 5;           // primary bit width
     localparam WIDTH_CNT = 32;      // counter bit width
-    localparam MAX_CYCLES = 10;    // max number of cycles to perform
+    localparam MAX_CYCLES = 20;    // max number of cycles to perform
 
     // Clock and reset initialization
     reg clk = 0;
@@ -20,7 +20,7 @@ module draw_line_tb ();
 
     wire [WIDTH_CNT-1:0] cycle_count;
     tb_counter #(
-        .bit_width(WIDTH_CNT)
+        .WIDTH(WIDTH_CNT)
     ) cycle_counter (
         .clk(clk),
         .clk_en(1'b1),
@@ -59,13 +59,13 @@ module draw_line_tb ();
     logic drawing, done;
     logic [DL_CORDW-1:0] x0, y0, x1, y1, x, y;
     
-    draw_line #(.CORDW(DL_CORDW)) _draw_line (.*);
+    draw_line #(.XY_BITW(DL_CORDW)) _draw_line (.*);
     assign start = cycle_count == 1;
     assign oe = 1;
-    assign x0 = 0;
-    assign y0 = 0;
-    assign x1 = 0;
-    assign y1 = 10;
+    assign x0 = 10;
+    assign y0 = 10;
+    assign x1 = 10;
+    assign y1 = 0;
 
 endmodule
 

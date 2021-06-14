@@ -17,52 +17,66 @@ module draw_line #(
     // https://github.com/projf/projf-explore/blob/master/lib/graphics/draw_line.sv
 
     // line properties
-    logic right, swap; // drawing direction
+    logic right, down, swap; // drawing direction
+    logic x_done, y_done;
     logic [XY_BITW-1:0] xa, xb, ya, yb; // starting/ending point
-    reg [XY_BITW-1:0] _x0, _y0, _x1, _y1;
-    assign x0 = _x0;
-    assign y0 = _y0;
-    assign x1 = _x1;
-    assign y1 = _y1;
     always_comb begin
         swap = (y0 > y1);       // swap points if y0 is below y1
-        xa = swap ? x1 : x0;
-        xb = swap ? x0 : x1;
-        ya = swap ? y1 : y0;
-        yb = swap ? y0 : y1;
+        xa = x0;//swap ? x1 : x0;
+        xb = x1;//swap ? x0 : x1;
+        ya = y0;//swap ? y1 : y0;
+        yb = y1;//swap ? y0 : y1;
         right = (xa < xb);      // drawing right to left ?
+        down = (ya < yb);
     end
 
     always_ff @(posedge clk) begin
-        //$display("draw_line: a (%0d,%0d), b (%0d,%0d)", xa, ya, xb, yb);
-        //$display("movx %0d, movy %0d, dx %0d, dy %0d, err %0d", movx, movy, dx, dy, err);
+        //$display("draw_line: a (%0d,%0d), b (%0d,%0d), movx %0d, movy %0d, dx %0d, dy %0d, err %0d", xa, ya, xb, yb, movx, movy, dx, dy, err);
     end
 
     // error values
     logic movx, movy; // horizontal/vertical move required
     always_comb begin
         movx = (2*err >= dy);
-        movy = (2*err <= dx);
+        movy = (2*err >= dx);
     end
 
     // ACTIVE
     logic tmp_active;
-    logic [XY_BITW-1:0] tmp_x, tmp_y;
+    logic signed [XY_BITW-1:0] tmp_x, tmp_y;
     logic tmp_done;
-    logic signed [XY_BITW:0] tmp_err;
+    logic signed [2*XY_BITW:0] tmp_err;
 
     reg active;
-    reg [XY_BITW-1:0] _x, _y;
+    reg signed [XY_BITW-1:0] _x, _y;
     reg _done;
-    reg signed [XY_BITW:0] err, dx, dy;
+    reg signed [2*XY_BITW:0] err, dx, dy;
 
     wire [1:0] mov_vec = {movx, movy};
-    assign x = tmp_x;
-    assign y = tmp_y;
+    assign x = _x;
+    assign y = _y;
+    assign x_done = (_x == xb);
+    assign y_done = (_y == yb);
     always_comb begin
-        tmp_x = (movx && !_done) ? (right ? _x + 1 : _x - 1) : _x;
-        tmp_y = (movy && !_done) ? _y + 1 : _y;
+        /*
+        if (movx) begin
+            tmp_x = x_done ? _x : (right ? _x + 1 : _x - 1);
+            tmp_err = err + dy;
+        end
+        if (movy) begin
+            tmp_y = y_done ? _y : (down ? _y + 1 : _y - 1);
+            tmp_err = err + dx;
+        end
+        if (movx && movy) begin
+            tmp_x = x_done ? _x : (right ? _x + 1 : _x - 1);
+            tmp_y = y_done ? _y : (down ? _y + 1 : _y - 1);
+            tmp_err = err + dy + dx;
+        end
+        */
 
+        
+        tmp_x = (movx && !x_done) ? (right ? _x + 1 : _x - 1) : _x;
+        tmp_y = (movy && !y_done) ? (down ? _y + 1 : _y - 1) : _y;
         case (mov_vec)
             2'b01: begin
                 tmp_err = err + dy;
@@ -77,10 +91,11 @@ module draw_line #(
                 tmp_err = err;
             end
         endcase
+        
     end
 
     assign tmp_done = (tmp_x == xb && tmp_y == yb);
-    assign done = tmp_done;
+    assign done = _done;
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
             _x <= 0;
@@ -92,14 +107,14 @@ module draw_line #(
         end else if (active || start) begin
             _x <= start ? xa : tmp_x;
             _y <= start ? ya : tmp_y;
-            _done <= start ? 0 : tmp_done;
+            _done <= _done ? 0 : (start ? 0 : tmp_done);
             err <= start ? dx + dy : tmp_err;
             dx <= right ? xb - xa : xa - xb; // dx = abs(xb-xa)
-            dy <= ya - yb; // dy = -abs(yb-ya)
+            dy <= down ? yb - ya : ya - yb; // dy = -abs(yb-ya)
         end
     end
 
-    assign tmp_active = active && !(tmp_done);
+    assign tmp_active = active && !(_done);
     assign drawing = tmp_active;
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
@@ -107,6 +122,5 @@ module draw_line #(
         end else if (oe) begin
             active <= start || tmp_active;
         end
-
     end
 endmodule

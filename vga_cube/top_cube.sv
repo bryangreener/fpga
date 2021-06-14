@@ -40,14 +40,14 @@ module top_cube (
     localparam CUBE_HEIGHT  = 10;
     localparam CUBE_DEPTH   = 5;
     localparam CUBE_ANGLE   = 45;
-    localparam CUBE_SCALE   = 1;
+    localparam CUBE_SCALE   = 2;
     localparam CUBE_COLORW  = 3;
 
     // framebuffer settings
-    localparam FB_WIDTH     = CUBE_WIDTH + (CUBE_DEPTH + 1);
-    localparam FB_HEIGHT    = CUBE_HEIGHT + (CUBE_DEPTH + 1);
-    localparam POSX         = 0;    // beginning x pos
-    localparam POSY         = 0;    // beginning y pos
+    localparam FB_WIDTH     = (CUBE_WIDTH + (CUBE_DEPTH + 1)) * CUBE_SCALE;
+    localparam FB_HEIGHT    = (CUBE_HEIGHT + (CUBE_DEPTH + 1)) * CUBE_SCALE;
+    localparam POSX         = 200;    // beginning x pos
+    localparam POSY         = 200;    // beginning y pos
 
     // Output ports
     logic _vga_hs, _vga_vs, _vga_r, _vga_g, _vga_b;
@@ -70,7 +70,7 @@ module top_cube (
     assign fb_x = (state == DONE) ? sx : dl_x;
     assign fb_y = (state == DONE) ? sy : dl_y;
 
-    // Cuve and Draw Line ports
+    // Cube and Draw Line ports
     logic [LINEW-1:0] line_id = 0; // line identifier
     logic [DT_BITW-1:0] lx0, lx1, ly0, ly1; // line coords
     logic draw_start, drawing, draw_done; // drawing signals
@@ -84,15 +84,19 @@ module top_cube (
         if (!rst) begin
             state <= IDLE;
         end
+        /*
         if (!clk_locked) begin
             state <= IDLE;
         end
+        */
         case (state)
             INIT: begin
+                $display("INIT");
                 draw_start <= 1;
                 state <= DRAW;
             end
             DRAW: begin
+                //$display("DRAW");
                 draw_start <= 0;
                 if (draw_done) begin
                     if (line_id == LINE_CNT-1) begin
@@ -104,9 +108,11 @@ module top_cube (
                 end
             end
             DONE: begin
+                $display("DONE");
                 state <= DONE;
             end
             default: begin
+                $display("IDLE");
                 if (dt_frame) state <= INIT; // IDLE
             end
         endcase
@@ -134,13 +140,14 @@ module top_cube (
     localparam FB_DEPTH = FB_PIXEL * CUBE_COLORW;
     localparam FB_ADDRW = $clog2(FB_DEPTH);
     
-    
     // OUTPUT FOR VALIDATING RGB OUT
     // Enable framebuffer reading when state is DONE
     
     logic fb_oe;
     assign fb_oe = (state == DONE);
     always_ff @(posedge clk_pix) begin
+        $display("draw_start %0d, oe %0d, s (%0d,%0d), e (%0d,%0d), o (%0d,%0d), drawing %0d, done %0d",
+            draw_start, (state != 3), lx0, ly0, lx1, ly1, dl_x, dl_y, drawing, draw_done);
         if (fb_oe) begin
             if (dt_frame) begin
                 $display("FRAME: FB_PIXEL %0d, FB_DEPTH %0d, FB_ADDRW %0d, CUBE_COLORW %0d",
@@ -225,7 +232,7 @@ module top_cube (
         .clk(clk_pix),
         .rst(!rst),
         .start(draw_start),
-        .oe((state != 3)), // state == DONE. Cant use 'DONE' in port
+        .oe((state != 3)),
         .x0(lx0),
         .y0(ly0),
         .x1(lx1),

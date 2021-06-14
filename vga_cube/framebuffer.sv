@@ -41,9 +41,9 @@ module framebuffer #(
     end
 
     // Initialize memory array with 0s
-    initial begin
-        for (int i = 0; i < FB_DEPTH; i++) mem[i] = 0;
-    end
+    //initial begin
+    //    for (int i = 0; i < FB_DEPTH; i++) mem[i] = 0;
+    //end
 
     // If write is enabled, save color to current x,y pos
     always_ff @(posedge clk) begin

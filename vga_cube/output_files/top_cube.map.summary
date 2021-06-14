@@ -1,14 +1,14 @@
-Analysis & Elaboration Status : Successful - Fri Jun 11 17:12:11 2021
+Analysis & Synthesis Status : Successful - Mon Jun 14 13:21:57 2021
 Quartus Prime Version : 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 Revision Name : top_cube
 Top-level Entity Name : top_cube
 Family : Cyclone IV E
-Total logic elements : N/A until Partition Merge
-    Total combinational functions : N/A until Partition Merge
-    Dedicated logic registers : N/A until Partition Merge
-Total registers : N/A until Partition Merge
-Total pins : N/A until Partition Merge
-Total virtual pins : N/A until Partition Merge
-Total memory bits : N/A until Partition Merge
-Embedded Multiplier 9-bit elements : N/A until Partition Merge
-Total PLLs : N/A until Partition Merge
+Total logic elements : 19,576
+    Total combinational functions : 10,171
+    Dedicated logic registers : 9,771
+Total registers : 9771
+Total pins : 7
+Total virtual pins : 0
+Total memory bits : 3,072
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 1

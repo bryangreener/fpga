@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP4CE22F17) Path("H:/code/fpga/vga_cube/output_files/") File("top_cube.sof") MfrSpec(OpMask(1));
+		Device PartName(EP4CE22F17) Path("C:/Users/bryan/Desktop/fpga/vga_cube/output_files/") File("top_cube.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

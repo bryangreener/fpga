@@ -61,7 +61,7 @@ module top_cube_no_pll (
     assign fb_x = (state == DONE) ? sx : dl_x;
     assign fb_y = (state == DONE) ? sy : dl_y;
 
-    // Cuve and Draw Line ports
+    // Cube and Draw Line ports
     logic [LINEW-1:0] line_id = 0; // line identifier
     logic [DT_BITW-1:0] lx0, lx1, ly0, ly1; // line coords
     logic draw_start, drawing, draw_done; // drawing signals
@@ -81,7 +81,7 @@ module top_cube_no_pll (
         end
         case (state)
             INIT: begin
-                //$display("INIT");
+                $display("INIT");
                 draw_start <= 1;
                 state <= DRAW;
             end
@@ -98,11 +98,11 @@ module top_cube_no_pll (
                 end
             end
             DONE: begin
-                //$display("DONE");
+                $display("DONE");
                 state <= DONE;
             end
             default: begin
-                //$display("IDLE");
+                $display("IDLE");
                 if (dt_frame) state <= INIT; // IDLE
             end
         endcase
