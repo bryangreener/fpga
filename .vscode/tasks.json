@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "iverilog Build",
+            "type": "shell",
+            "command": "${fileDirname}\\run_iverilog.sh",
+            "windows": {
+                "command": "${fileDirname}\\run_iverilog.bat"
+            },
+            "args": ["${fileDirname}", "${file}"],
+            "group": "build"
+        }
+    ]
+}
