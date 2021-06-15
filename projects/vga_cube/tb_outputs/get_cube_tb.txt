@@ -1,0 +1,13 @@
+VCD info: dumpfile tb_outputs/sim.vcd opened for output.
+line 1: start (0,10), end (10,10)
+line 2: start (10,10), end (10,0)
+line 3: start (10,0), end (0,0)
+line 4: start (5,5), end (5,15)
+line 5: start (5,15), end (15,15)
+line 6: start (15,15), end (15,5)
+line 7: start (15,5), end (5,5)
+line 8: start (0,0), end (5,5)
+line 9: start (0,10), end (5,15)
+line 10: start (10,0), end (15,5)
+line 11: start (10,10), end (15,15)
+get_cube_tb.sv:22: $finish called at 2300000 (1ps)

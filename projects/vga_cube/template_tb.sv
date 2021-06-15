@@ -1,12 +1,12 @@
 `timescale 1ns/1ps
-module draw_line_tb ();
+module _tb ();
     localparam WIDTH        = 5;                    // primary bit width
     localparam MAX_CYCLES   = 8;                // max number of cycles to perform
     localparam WIDTH_CNT    = $clog2(MAX_CYCLES)+1; // counter bit width
 
     initial begin
         $dumpfile("tb_outputs/sim.vcd");
-        $dumpvars(0,draw_line_tb); // !!! UPDATE _tb TO FILE NAME
+        $dumpvars(0,_tb); // !!! UPDATE _tb TO FILE NAME
     end
 
     // Clock and reset initialization
@@ -35,12 +35,7 @@ module draw_line_tb ();
             // This is a half clock. Tic high for one cycle.
             tic = !tic;
             // Display code here
-            $display("> END");
-            $display (">>>>>>>>>> CYCLE %0d <<<<<<<<<<", cycle_count);
-            $display("> START");
-            $display("Advance %0b", adv);
-            $display("Start %0d, oe %0d, coords (%0d, %0d), (%0d, %0d), xy (%0d, %0d), drawing %0d, done %0d",
-                start, oe, x0, y0, x1, y1, x, y, drawing, done);
+            //$display("%d: %d %d %d %d %d", cycle_count, vga_r, vga_g, vga_b, vga_hs, vga_vs);
 
         end else if (init) begin
             init <= 0;
@@ -52,19 +47,6 @@ module draw_line_tb ();
     end
 
     // Testing code here
-    // Testing code here
-    localparam DL_CORDW=16;
-    logic start, oe;
-    logic drawing, done;
-    logic [DL_CORDW-1:0] x0, y0, x1, y1, x, y;
-    
-    draw_line #(.XY_BITW(DL_CORDW)) _draw_line (.*);
-    assign start = cycle_count == 1;
-    assign oe = 1;
-    assign x0 = 10;
-    assign y0 = 10;
-    assign x1 = 10;
-    assign y1 = 0;
 
 endmodule
 

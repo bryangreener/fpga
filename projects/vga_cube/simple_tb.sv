@@ -1,8 +1,13 @@
 `timescale 1ns/1ps
 module simple_tb ();
-    localparam WIDTH = 5;           // primary bit width
-    localparam WIDTH_CNT = 32;      // counter bit width
-    localparam MAX_CYCLES = 12;    // max number of cycles to perform
+    localparam WIDTH        = 5;                    // primary bit width
+    localparam MAX_CYCLES   = 8;                // max number of cycles to perform
+    localparam WIDTH_CNT    = $clog2(MAX_CYCLES)+1; // counter bit width
+
+    initial begin
+        $dumpfile("tb_outputs/sim.vcd");
+        $dumpvars(0,simple_tb); // !!! UPDATE _tb TO FILE NAME
+    end
 
     // Clock and reset initialization
     reg clk = 0;
@@ -19,14 +24,7 @@ module simple_tb ();
     end
 
     wire [WIDTH_CNT-1:0] cycle_count;
-    tb_counter #(
-        .WIDTH(WIDTH_CNT)
-    ) cycle_counter (
-        .clk(clk),
-        .clk_en(1'b1),
-        .rst(rst),
-        .o(cycle_count)
-    );
+    tb_counter #(.WIDTH(WIDTH_CNT)) cycle_counter (.clk(clk), .clk_en(1'b1), .rst(rst), .o(cycle_count));
 
     reg init = 1;
     reg adv = 0;
@@ -37,11 +35,7 @@ module simple_tb ();
             // This is a half clock. Tic high for one cycle.
             tic = !tic;
             // Display code here
-            $display("> END");
-            $display (">>>>>>>>>> CYCLE %0d <<<<<<<<<<", cycle_count);
-            $display("> START");
-            $display("Advance %0b", adv);
-            $display("line %d (%d, %d), (%d, %d)", line_id, x0, y0, x1, y1);
+            //$display("%d: %d %d %d %d %d", cycle_count, vga_r, vga_g, vga_b, vga_hs, vga_vs);
 
         end else if (init) begin
             init <= 0;
@@ -53,42 +47,11 @@ module simple_tb ();
     end
 
     // Testing code here
-    
-    logic [15:0] x0, y0, x1, y1;
-    logic [WIDTH_CNT-1:0] line_id;
-    assign line_id = cycle_count - 1;
 
-    get_cube #(
-        .WIDTH(100),
-        .HEIGHT(100),
-        .DEPTH(5),
-        .ADJ_DEG(45),
-        .SCALE(1)
-    ) _get_cube (
-        .clk,
-        .rst,
-        .line_id,
-        .x0,
-        .y0,
-        .x1,
-        .y1
-    );
-
-    
-endmodule
-
-module test_mod #(
-    parameter RGBW=8
-) (
-    input [RGBW-1:0] rgb,
-    output r,
-    output g,
-    output b
-);
-    assign {r, g, b} = rgb;
 endmodule
 
 // COUNTER MODULE CODE BELOW
+
 module tb_counter #(
     parameter WIDTH=64
 ) (

@@ -407,7 +407,6 @@ module sdram (
         end
     end
 
-
   assign active_bank = {active_addr[23],active_addr[9]};
   assign csn_match = active_cs_n == f_cs_n;
   assign rnw_match = active_rnw == f_rnw;

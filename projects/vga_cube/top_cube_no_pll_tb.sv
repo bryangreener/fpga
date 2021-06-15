@@ -1,12 +1,12 @@
 `timescale 1ns/1ps
 module top_cube_no_pll_tb ();
     localparam WIDTH        = 5;                    // primary bit width
-    localparam MAX_CYCLES   = 20000;                  // max number of cycles to perform
+    localparam MAX_CYCLES   = 8;                // max number of cycles to perform
     localparam WIDTH_CNT    = $clog2(MAX_CYCLES)+1; // counter bit width
 
     initial begin
-        $dumpfile("sim.vcd");
-        $dumpvars(0,top_cube_no_pll_tb);
+        $dumpfile("tb_outputs/sim.vcd");
+        $dumpvars(0,top_cube_no_pll_tb); // !!! UPDATE _tb TO FILE NAME
     end
 
     // Clock and reset initialization
@@ -24,14 +24,7 @@ module top_cube_no_pll_tb ();
     end
 
     wire [WIDTH_CNT-1:0] cycle_count;
-    tb_counter #(
-        .WIDTH(WIDTH_CNT)
-    ) cycle_counter (
-        .clk(clk),
-        .clk_en(1'b1),
-        .rst(rst),
-        .o(cycle_count)
-    );
+    tb_counter #(.WIDTH(WIDTH_CNT)) cycle_counter (.clk(clk), .clk_en(1'b1), .rst(rst), .o(cycle_count));
 
     reg init = 1;
     reg adv = 0;
@@ -53,6 +46,7 @@ module top_cube_no_pll_tb ();
         if (tic) toc = !toc;
     end
 
+    // Testing code here
     // Testing code here
     logic vga_hs, vga_vs, vga_r, vga_g, vga_b;
     
